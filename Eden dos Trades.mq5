@@ -1,4 +1,4 @@
-﻿//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
 //|                                              InsideBar_Robo.mq5  |
 //|                                      Copyright 2026, Jeferson    |
 //+------------------------------------------------------------------+
@@ -241,7 +241,7 @@ void OnTick()
 
             if(trade.Buy(Volume_Operacao, _Symbol, entry, sl, tp, "Eden Compra"))
             {
-               Print("✅ COMPRA executada. SL: ", sl, " | TP: ", (tp>0?tp:"Média 8"));
+               Print("✅ COMPRA executada. SL: ", DoubleToString(sl, _Digits), " | TP: ", (tp>0?DoubleToString(tp, _Digits):"Média 8"));
             }
          }
          else if(condicaoVenda)
@@ -255,7 +255,7 @@ void OnTick()
 
             if(trade.Sell(Volume_Operacao, _Symbol, entry, sl, tp, "Eden Venda"))
             {
-               Print("✅ VENDA executada. SL: ", sl, " | TP: ", (tp>0?tp:"Média 8"));
+               Print("✅ VENDA executada. SL: ", DoubleToString(sl, _Digits), " | TP: ", (tp>0?DoubleToString(tp, _Digits):"Média 8"));
             }
          }
       }
@@ -323,7 +323,7 @@ void GetPeriodStats(datetime agora, int periodo, double &pl, int &wins, int &los
    {
       if(PositionGetSymbol(i) == _Symbol && PositionGetInteger(POSITION_MAGIC) == Numero_Magico)
       {
-         pl += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP) + PositionGetDouble(POSITION_COMMISSION);
+         pl += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
       }
    }
 }
@@ -335,57 +335,57 @@ void CreateDashboard()
 {
    int x = 15, y = 15, w = 320, h = 240;
    
-   // Fundo
+   // Fundo - Estilo Moderno Roxo Escuro
    ObjectCreate(0, panelPrefix+"BG", OBJ_RECTANGLE_LABEL, 0, 0, 0);
    ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_XDISTANCE, x);
    ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_YDISTANCE, y);
    ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_XSIZE, w);
    ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_YSIZE, h);
-   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_BGCOLOR, clrBlack);
+   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_BGCOLOR, ColorToARGB(0x4B0082, 230)); // Roxo escuro semi-transparente
    ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_BORDER_TYPE, BORDER_FLAT);
-   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_COLOR, clrDimGray);
-   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_CORNER, CORNER_RIGHT_UPPER);
-   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_BACK, true);
+   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_COLOR, ColorToARGB(0x9370DB, 180)); // Borda roxa mais clara
+   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_CORNER, CORNER_LEFT_UPPER);
+   ObjectSetInteger(0, panelPrefix+"BG", OBJPROP_BACK, false);
 
    // Título
-   CreateLabel(panelPrefix+"Title", x+10, y+10, "EDEN DOS TRADES v1.15", clrWhite, 10, CORNER_RIGHT_UPPER, true);
+   CreateLabel(panelPrefix+"Title", x+10, y+10, "EDEN DOS TRADES v1.15", clrWhite, 10, CORNER_LEFT_UPPER, true);
    
    // Cabeçalhos de Coluna
-   CreateLabel(panelPrefix+"Col_Day", x+10, y+35, "HOJE", clrDodgerBlue, 9, CORNER_RIGHT_UPPER, true);
-   CreateLabel(panelPrefix+"Col_Week", x+110, y+35, "SEMANA", clrDodgerBlue, 9, CORNER_RIGHT_UPPER, true);
-   CreateLabel(panelPrefix+"Col_Month", x+220, y+35, "MÊS", clrDodgerBlue, 9, CORNER_RIGHT_UPPER, true);
+   CreateLabel(panelPrefix+"Col_Day", x+10, y+35, "HOJE", clrMediumPurple, 9, CORNER_LEFT_UPPER, true);
+   CreateLabel(panelPrefix+"Col_Week", x+110, y+35, "SEMANA", clrMediumPurple, 9, CORNER_LEFT_UPPER, true);
+   CreateLabel(panelPrefix+"Col_Month", x+220, y+35, "MÊS", clrMediumPurple, 9, CORNER_LEFT_UPPER, true);
 
    // Linhas Divisórias
-   CreateLine(panelPrefix+"L1", x+10, y+60, w-20, clrDimGray);
-   CreateLine(panelPrefix+"L2", x+10, y+100, w-20, clrDimGray);
-   CreateLine(panelPrefix+"L3", x+10, y+140, w-20, clrDimGray);
-   CreateLine(panelPrefix+"L4", x+10, y+180, w-20, clrDimGray);
+   CreateLine(panelPrefix+"L1", x+10, y+60, w-20, ColorToARGB(0x9370DB, 100));
+   CreateLine(panelPrefix+"L2", x+10, y+100, w-20, ColorToARGB(0x9370DB, 100));
+   CreateLine(panelPrefix+"L3", x+10, y+140, w-20, ColorToARGB(0x9370DB, 100));
+   CreateLine(panelPrefix+"L4", x+10, y+180, w-20, ColorToARGB(0x9370DB, 100));
 
    // Rótulos das Linhas (Esquerda)
-   CreateLabel(panelPrefix+"Lbl_PL", x+10, y+70, "Lucro / Perda:", clrWhite, 8, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Lbl_Win", x+10, y+110, "Trades Positivos:", clrWhite, 8, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Lbl_Loss", x+10, y+150, "Trades Negativos:", clrWhite, 8, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Lbl_Tot", x+10, y+190, "Total de Trades:", clrWhite, 8, CORNER_RIGHT_UPPER, false);
+   CreateLabel(panelPrefix+"Lbl_PL", x+10, y+70, "Lucro / Perda:", clrLavender, 8, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Lbl_Win", x+10, y+110, "Trades Positivos:", clrLavender, 8, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Lbl_Loss", x+10, y+150, "Trades Negativos:", clrLavender, 8, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Lbl_Tot", x+10, y+190, "Total de Trades:", clrLavender, 8, CORNER_LEFT_UPPER, false);
 
    // Valores (Serão atualizados dinamicamente)
-   CreateLabel(panelPrefix+"Val_PL_Day", x+10, y+70, "$0.00", clrWhite, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_PL_Week", x+110, y+70, "$0.00", clrWhite, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_PL_Month", x+220, y+70, "$0.00", clrWhite, 9, CORNER_RIGHT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_PL_Day", x+10, y+70, "$0.00", clrWhite, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_PL_Week", x+110, y+70, "$0.00", clrWhite, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_PL_Month", x+220, y+70, "$0.00", clrWhite, 9, CORNER_LEFT_UPPER, false);
 
-   CreateLabel(panelPrefix+"Val_Win_Day", x+10, y+110, "0", clrLime, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_Win_Week", x+110, y+110, "0", clrLime, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_Win_Month", x+220, y+110, "0", clrLime, 9, CORNER_RIGHT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Win_Day", x+10, y+110, "0", clrLime, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Win_Week", x+110, y+110, "0", clrLime, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Win_Month", x+220, y+110, "0", clrLime, 9, CORNER_LEFT_UPPER, false);
 
-   CreateLabel(panelPrefix+"Val_Loss_Day", x+10, y+150, "0", clrRed, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_Loss_Week", x+110, y+150, "0", clrRed, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_Loss_Month", x+220, y+150, "0", clrRed, 9, CORNER_RIGHT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Loss_Day", x+10, y+150, "0", clrRed, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Loss_Week", x+110, y+150, "0", clrRed, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Loss_Month", x+220, y+150, "0", clrRed, 9, CORNER_LEFT_UPPER, false);
 
-   CreateLabel(panelPrefix+"Val_Tot_Day", x+10, y+190, "0", clrWhite, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_Tot_Week", x+110, y+190, "0", clrWhite, 9, CORNER_RIGHT_UPPER, false);
-   CreateLabel(panelPrefix+"Val_Tot_Month", x+220, y+190, "0", clrWhite, 9, CORNER_RIGHT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Tot_Day", x+10, y+190, "0", clrWhite, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Tot_Week", x+110, y+190, "0", clrWhite, 9, CORNER_LEFT_UPPER, false);
+   CreateLabel(panelPrefix+"Val_Tot_Month", x+220, y+190, "0", clrWhite, 9, CORNER_LEFT_UPPER, false);
 
    // Status da Operação (Rodapé)
-   CreateLabel(panelPrefix+"Status", x+10, y+215, "Status: Aguardando Sinal...", clrYellow, 8, CORNER_RIGHT_UPPER, false);
+   CreateLabel(panelPrefix+"Status", x+10, y+215, "Status: Aguardando Sinal...", clrYellow, 8, CORNER_LEFT_UPPER, false);
    
    ChartRedraw();
 }
@@ -490,7 +490,7 @@ void CreateLine(string name, int x, int y, int width, color clr)
    ObjectSetInteger(0, name, OBJPROP_XSIZE, width);
    ObjectSetInteger(0, name, OBJPROP_YSIZE, 1);
    ObjectSetInteger(0, name, OBJPROP_BGCOLOR, clr);
-   ObjectSetInteger(0, name, OBJPROP_CORNER, CORNER_RIGHT_UPPER);
+   ObjectSetInteger(0, name, OBJPROP_CORNER, CORNER_LEFT_UPPER);
 }
 
 string FormatMoney(double value)
