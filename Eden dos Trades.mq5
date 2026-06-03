@@ -1,5 +1,5 @@
 ﻿//+------------------------------------------------------------------+
-//|                                              InsideBar_Robo.mq5  |
+//|                                              Eden dos Trades.mq5  |
 //|                                      Copyright 2026, Jeferson    |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Jeferson Santos"
